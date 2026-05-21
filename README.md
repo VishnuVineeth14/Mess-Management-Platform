@@ -1,106 +1,173 @@
 # Smart Mess Management Platform
 
-A multi-module system for managing hostel mess operations, including a Flutter admin/student/staff app and a face-attendance stack (Flutter client + Node.js backend).
+## 📘 Abstract
 
-## Project Overview
+The Smart Mess Management Platform is a cross-platform Flutter application designed to digitize hostel mess operations. The system supports role-based access for students, staff, and administrators and provides modules for menu management, complaint handling, staff workflows, attendance-related utilities, and billing support. Firebase services are used for authentication, data persistence, and cloud-backed synchronization.
 
-This repository contains three connected modules:
+## 🔎 Index Terms
 
-1. **Main Flutter App (`/`)**
-   - Core mess management workflows for Admin, Staff, and Students
-   - Firebase Auth + Firestore based data and access control
-2. **Face Attendance Mobile App (`face_attendance_app/`)**
-   - Captures and validates faces for attendance marking
-3. **Face Attendance Backend (`face_attendance_backend/`)**
-   - Express API for face embedding storage and attendance updates in Firestore
+Flutter, Firebase, Firebase Authentication, Cloud Firestore, mess management, role-based access control, attendance tracking, billing, complaint management.
 
-## Repository Structure
+## 1. Introduction 📘
+
+Traditional mess administration often depends on manual recordkeeping, fragmented communication, and delayed issue resolution. This platform addresses those limitations through a digital workflow that centralizes user authentication, menu publishing, complaints, replacements, reports, and administrative operations in a single application.
+
+The repository contains the main Flutter application and supporting modules for face attendance registration and backend processing.
+
+## 2. Project Specifications 🧾
+
+| Specification | Details |
+| --- | --- |
+| Project Name | Smart Mess Management Platform |
+| Primary Frontend | Flutter application |
+| Secondary Module | Face attendance app |
+| Backend Service | Node.js Express API for face attendance |
+| State Management | Provider |
+| Authentication | Firebase Authentication, Google sign-in, email/password sign-in |
+| Database | Cloud Firestore |
+| File Storage | Firebase Storage |
+| Supported Platforms | Android, iOS, Web, macOS, Linux, Windows |
+| Dart SDK | 3.9.2 |
+| Flutter Package Version | 1.0.0+1 |
+| Design System | Material UI with custom app theme |
+
+## 3. System Overview 🧩
+
+The application is organized around three primary user roles.
+
+- Student: views the daily menu, raises complaints, submits replacement requests, checks billing and notifications, and uses mess-related services.
+- Staff: manages operational tasks, student records, analytics, settings, and mess-related reviews.
+- Administrator: oversees approvals, user management, operational dashboards, and system-level reporting.
+
+## 4. Major Modules 🏗️
+
+### 4.1 Main Mess Management App
+
+The root Flutter application located in the `lib/` directory provides:
+
+- Authentication and onboarding flows
+- Role-based routing
+- Menu publication and menu seeding
+- Complaint submission and review
+- Food report and replacement workflows
+- Billing and payment tracking
+- Analytics and operational dashboards
+
+### 4.2 Face Attendance Application
+
+The `face_attendance_app/` package provides a dedicated face registration and attendance workflow. It uses camera capture and face detection to support attendance marking through a separate interface.
+
+### 4.3 Face Attendance Backend
+
+The `face_attendance_backend/` service is an Express-based API that supports face embedding storage, attendance marking, and utility scripts such as attendance backfilling.
+
+## 5. Technology Stack ⚙️
+
+- Frontend: Flutter
+- State management: Provider
+- Authentication: Firebase Auth and Google Sign-In
+- Database: Cloud Firestore
+- Storage: Firebase Storage
+- Face detection: Google ML Kit face detection
+- Backend runtime: Node.js
+- API framework: Express
+
+## 6. Project Structure 📂
 
 ```text
 Mess-Management-Platform/
-├── lib/                           # Main Flutter app source (models, services, screens, widgets)
-├── assets/                        # Main app assets
-├── test/                          # Main app tests
-├── face_attendance_app/           # Separate Flutter app for face registration/attendance
-│   └── lib/
-├── face_attendance_backend/       # Node.js backend for face attendance APIs
-│   └── src/
-├── docs/                          # Documentation and setup notes
-├── tool/                          # Utility scripts
-├── android/ ios/ web/ macos/ linux/ windows/  # Flutter platform targets
-├── firestore.rules                # Firestore security rules
-├── firebase.json                  # Firebase project config
-└── pubspec.yaml                   # Main app Flutter dependencies and metadata
+├── android/                 # Android host project
+├── assets/                  # Shared application assets
+├── docs/                    # Supporting documentation and scripts
+├── face_attendance_app/     # Separate Flutter face attendance app
+│   ├── lib/                 # Attendance app source code
+│   └── pubspec.yaml         # Attendance app package configuration
+├── face_attendance_backend/  # Node.js attendance API
+│   └── src/                 # Express server, services, scripts, utilities
+├── ios/                     # iOS host project
+├── lib/                     # Main Flutter application source code
+│   ├── config/              # App and Firebase configuration
+│   ├── models/              # Firestore and domain models
+│   ├── providers/           # Application state management
+│   ├── repositories/        # Data access layer
+│   ├── screens/             # UI screens and workflows
+│   ├── services/            # Business logic and integrations
+│   ├── utils/               # Helper utilities
+│   └── widgets/             # Reusable UI components
+├── test/                    # Flutter tests
+├── web/                     # Web entry point and static assets
+├── windows/                 # Windows host project
+├── linux/                   # Linux host project
+├── macos/                   # macOS host project
+├── firebase.json            # Firebase project configuration
+├── firestore.indexes.json   # Firestore index definitions
+├── firestore.rules          # Firestore security rules
+└── pubspec.yaml             # Main Flutter package configuration
 ```
 
-## Main App Features
+## 7. Firestore Data Model 🗃️
 
-- Role-based authentication (Admin, Staff, Student)
-- Menu display and management workflows
-- Complaint submission and tracking
-- Replacement food selection
-- Billing and pending bill management
-- Mess cancellation flow
-- Analytics dashboard
+### 7.1 Core Collections
 
-## Face Attendance Module
+- `users`: application user profiles and role data
+- `mess_menu`: breakfast, lunch, snacks, and dinner menu documents
+- `food_reports`: reported meal issues and resolution status
+- `mess_bill_payments`: persistent payment status records
+- `notifications`: in-app notification records
 
-### Face Attendance App (`face_attendance_app`)
-- Camera-based face capture
-- Face registration workflow
-- Attendance marking workflow
+### 7.2 Face Attendance Collections
 
-### Face Attendance Backend (`face_attendance_backend`)
-- `POST /register-face`
-- `GET /face-embeddings`
-- `POST /mark-attendance`
+- `face_data`: stored face embeddings indexed by student ID
+- `attendance`: date-based attendance documents with daily student subcollections
 
-For full setup and Firestore schema, see:
-- `docs/face_attendance_setup.md`
+## 8. Prerequisites ✅
 
-## Technology Stack
+- Flutter SDK installed and configured
+- Node.js installed for the backend service
+- Firebase project access
+- Firebase CLI installed
+- FlutterFire CLI installed
 
-- **Frontend:** Flutter (Dart)
-- **Backend (face attendance):** Node.js + Express
-- **Database/Auth/Storage:** Firebase (Firestore, Auth, Storage)
-- **State Management:** Provider
+## 9. Setup Instructions 🚀
 
-## Prerequisites
-
-- Flutter SDK
-- Dart SDK
-- Node.js + npm
-- Firebase CLI
-- FlutterFire CLI
-
-Install CLIs (if needed):
+### 9.1 Install Firebase Tools
 
 ```bash
 npm install -g firebase-tools
 dart pub global activate flutterfire_cli
 ```
 
-## Setup
-
-### 1) Configure Firebase for the main Flutter app
-
-From repository root:
+### 9.2 Authenticate with Firebase
 
 ```bash
 firebase login
+```
+
+### 9.3 Configure the Flutter App
+
+Run Firebase configuration from the repository root and select the Firebase project used by this system.
+
+```bash
 flutterfire configure
 ```
 
-### 2) Run the main Flutter app
+This regenerates `lib/firebase_options.dart` for the selected platforms.
 
-From repository root:
+### 9.4 Fetch Dependencies
 
 ```bash
 flutter pub get
+```
+
+## 10. Running the Application ▶️
+
+### 10.1 Main Flutter App
+
+```bash
 flutter run
 ```
 
-### 3) Run face attendance backend
+### 10.2 Face Attendance Backend
 
 ```bash
 cd face_attendance_backend
@@ -109,7 +176,7 @@ cp .env.example .env
 npm start
 ```
 
-### 4) Run face attendance Flutter app
+### 10.3 Face Attendance App
 
 ```bash
 cd face_attendance_app
@@ -117,12 +184,28 @@ flutter pub get
 flutter run
 ```
 
-## Useful Documentation
+## 11. Functional Capabilities ✨
 
-- `docs/face_attendance_setup.md` — face attendance architecture, Firestore schema, API contracts, and local run steps
+- Role-based login for students, staff, and administrators
+- Digital menu viewing and menu seeding
+- Complaint registration and administrative review
+- Food issue reporting with resolution tracking
+- Bill generation and payment state persistence
+- Student and staff operational dashboards
+- Face-based attendance registration and marking
 
-## Notes
+## 12. Configuration Notes ⚠️
 
-- Main app Firebase configuration is generated in `lib/firebase_options.dart`.
-- Face attendance backend defaults to port `3000` (see `face_attendance_backend/.env.example`).
-- For Android emulator-to-localhost communication, use `http://10.0.2.2:3000` as backend base URL.
+- Ensure Firebase rules and indexes are deployed before production use.
+- Verify the correct Firebase project is selected during FlutterFire configuration.
+- For face attendance locally, the backend may require Google application credentials.
+- The Android emulator backend base URL is typically `http://10.0.2.2:3000`.
+
+## 13. Documentation 📄
+
+- `docs/face_attendance_setup.md` describes the face attendance module, API endpoints, and Firestore structure.
+- `README.md` provides the primary project overview and setup guide.
+
+## 14. Conclusion
+
+The Smart Mess Management Platform provides a structured digital workflow for hostel mess operations. Its modular architecture, Firebase integration, and dedicated face attendance components make it suitable for operational tracking, student services, and administrative oversight in a single system.
